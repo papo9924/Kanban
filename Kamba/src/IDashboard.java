@@ -1,9 +1,7 @@
 
-public class IDashboard {
-	boolean Agregar (Source tarea) {
-		return false;
-	}
-	boolean Remover (Source tarea) {
-		return false;
-	}
-	}
+public interface IDashboard {
+	public abstract boolean add(Task task);
+	boolean remove(Task task);
+
+	void clear();
+}
