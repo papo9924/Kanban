@@ -1,7 +1,4 @@
-
-
 import java.util.Date;
-
 
 public class Task {
 	private String title;
