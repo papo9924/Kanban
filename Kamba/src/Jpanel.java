@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.util.Calendar;
 import java.util.Date;
 import java.awt.Color;
+import javax.swing.JProgressBar;
 
 @SuppressWarnings("serial")
 public class Jpanel extends JFrame {
@@ -33,9 +34,7 @@ public class Jpanel extends JFrame {
 		textField_3.setText("");
 		textField_4.setText("");
 	}
-	/**
-	 * Create the panel.
-	 */
+
 	public Jpanel() {
 		setTitle("Kamban");
 		getContentPane().setBackground(Color.GRAY);
@@ -134,12 +133,15 @@ public class Jpanel extends JFrame {
 		btnNewButton.setBounds(29, 369, 103, 41);
 		getContentPane().add(btnNewButton);
 
+		
 		JButton btnCancelar = new JButton("Cancelar");
 		btnCancelar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dispose();	
-			}
-		});
+		 			public void actionPerformed(ActionEvent e) {
+		 				if(JOptionPane.showConfirmDialog(Jpanel.this, "Decea Cerrar la Ventana", "Cerrar", JOptionPane.YES_NO_OPTION)==JOptionPane.OK_OPTION){
+		 					dispose();
+		 				System.exit(1);}
+		 			}
+		 	});
 		btnCancelar.setBounds(174, 369, 103, 41);
 		getContentPane().add(btnCancelar);
 
@@ -158,7 +160,14 @@ public class Jpanel extends JFrame {
 		textField_4.setBounds(112, 334, 198, 20);
 		getContentPane().add(textField_4);
 		textField_4.setColumns(10);
-
+		
+		JProgressBar progressBar = new JProgressBar();
+		progressBar.setForeground(Color.RED);
+		progressBar.setBounds(85, 11, 146, 14);
+		getContentPane().add(progressBar);
+	for(int x=0;x<100;x++)
+		progressBar.setValue(x);
+				
 
 
 
