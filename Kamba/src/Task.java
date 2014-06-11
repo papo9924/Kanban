@@ -1,5 +1,4 @@
 import java.util.Date;
-
 public class Task {
 
 	private final Object addSave = new Object();
@@ -19,32 +18,28 @@ public class Task {
 	}
 
 	public Task(String title) {
-		this(title, State.BACKLOG,(short) 1);
+		this(title, State.BACKLOG, (short) 1);
 		System.out.println("starting Task(String) ctor...");
 	}
+
 	public Task(String title, short priority) {
 		this(title, State.BACKLOG, priority);
 		System.out.println("starting Task(String, Priority) ctor...");
 	}
 
-	public Task(String title,State state) {
-		super();
+	public Task(String title, State state) {
+		this(title, state, (short) 1);
 		System.out.println("starting Task(String, State) ctor...");
-
-		this.title = title;
-		createDate = new Date();
-		priority = 1;
-		this.state  = state;
 	}
 
-	public Task(String title,State state, short priority){
+	public Task(String title, State state, short priority) {
 		super();
-		System.out.println("starting Task(String, State,Priority) ctor...");
+		System.out.println("starting Task(String, State, Priority) ctor...");
 
 		this.title = title;
 		createDate = new Date();
 		this.priority = priority;
-		this.state  = state;
+		this.state = state;
 	}
 
 	public String getTitle() {
@@ -52,8 +47,8 @@ public class Task {
 	}
 
 	public void setTitle(String title) {
-		if(title != null) {
-		this.title = title;
+		if (title != null) {
+			this.title = title;
 		}
 	}
 
@@ -117,9 +112,21 @@ public class Task {
 		return this.title;
 	}
 
+	public String toHtml() {
+		return "<table><tr><td>Title:</td><td>" + title + "</td></tr>"
+				+ "<tr><td>Description:</td><td>" + description + "</td></tr>"
+				+ "<tr><td>State:</td><td>" + state + "</td></tr>"
+				+ "<tr><td>Category:</td><td>" + category + "</td></tr>"
+				+ "<tr><td>Priority:</td><td>" + priority + "</td></tr>"
+				+ "<tr><td>Owner:</td><td>" + owner + "</td></tr>"
+				+ "<tr><td>Due Date:</td><td>" + dueDate + "</td></tr>"
+				+ "<tr><td>Create Date:</td><td>" + createDate
+				+ "</td></tr></table>";
+	}
+
 	public boolean equals(Object obj) {
 		if (obj != null) {
-			if(obj instanceof Task) {
+			if (obj instanceof Task) {
 				return title.equals(((Task) obj).getTitle());
 			}
 		}
@@ -127,21 +134,22 @@ public class Task {
 	}
 
 	public boolean remove() {
-		synchronized(this){
+		//
+		synchronized (this) {
 			return true;
 		}
 	}
 
 	public boolean save() {
-		//
 
-		synchronized (addSave){
-		try{
-			Thread.sleep(1*1000);
-		} catch(InterruptedException e){
-			e.printStackTrace();
-		}
-		return true;
+		//
+		synchronized (addSave) {
+			try {
+				Thread.sleep(1 * 1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			return true;
 		}
 	}
 }

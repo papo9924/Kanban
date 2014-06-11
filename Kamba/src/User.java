@@ -1,5 +1,5 @@
 
-public class User implements Runnable {
+public class User extends Thread{
 	public void run() {
 		String name = Thread.currentThread().getName();
 		int priority = Thread.currentThread().getPriority();

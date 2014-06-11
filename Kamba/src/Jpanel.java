@@ -1,6 +1,8 @@
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
@@ -8,181 +10,239 @@ import javax.swing.DefaultComboBoxModel;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.awt.Color;
+import java.awt.EventQueue;
+
 import javax.swing.JProgressBar;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
+import javax.swing.text.JTextComponent;
+
+import com.sun.org.apache.xerces.internal.impl.xpath.regex.ParseException;
 
 @SuppressWarnings("serial")
 public class Jpanel extends JFrame {
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
-	private JTextField textField_4;
-	@SuppressWarnings("rawtypes")
-	private JComboBox comboBox;
-	@SuppressWarnings("rawtypes")
-	private JComboBox comboBox_1;
 
-	private void clean() {
-		textField.setText("");
-		textField_1.setText("");
-		textField_2.setText("");
-		comboBox.setSelectedIndex(0);
-		comboBox_1.setSelectedIndex(0);
-		textField_3.setText("");
-		textField_4.setText("");
-	}
+	private JLayeredPane contentPane;
+	private JTextField titulo;
+	private JTextField descripcion;
+	private JTextField categoria;
+	private JTextField usuario;
+	private JTextField date;
+	private JComboBox<State> Estado;//<State> hace referencia a la clase State
+	private JComboBox Prioridad;
+	JButton Aceptar = new JButton("Add");
+	JButton Cancel = new JButton("Cancel");
 
 	public Jpanel() {
-		setTitle("Kamban");
-		getContentPane().setBackground(Color.GRAY);
-		getContentPane().setLayout(null);
+		setForeground(Color.GRAY);
+		setTitle("Kamba-GRM");
+		initialize();
+		addListeners();
+	}
 
-		JLabel lblTtulo = new JLabel("T\u00EDtulo:");
-		lblTtulo.setBounds(29, 41, 55, 16);
-		getContentPane().add(lblTtulo);
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Jpanel frame = new Jpanel();
+					frame.setVisible(true);
 
-		textField = new JTextField();
-		textField.setBounds(112, 39, 198, 20);
-		getContentPane().add(textField);
-		textField.setColumns(10);
-
-		JLabel lblNewLabel = new JLabel("Descripci\u00F3n:");
-		lblNewLabel.setBounds(29, 73, 71, 16);
-		getContentPane().add(lblNewLabel);
-
-		textField_1 = new JTextField();
-		textField_1.setBounds(112, 73, 198, 136);
-		getContentPane().add(textField_1);
-		textField_1.setColumns(10);
-
-		JLabel lblEstado = new JLabel("Estado:");
-		lblEstado.setBounds(29, 214, 55, 16);
-		getContentPane().add(lblEstado);
-
-		JLabel lblCategora = new JLabel("Categor\u00EDa:");
-		lblCategora.setBounds(29, 251, 71, 16);
-		getContentPane().add(lblCategora);
-
-		JLabel lblPrioridad = new JLabel("Prioridad:");
-		lblPrioridad.setBounds(29, 278, 71, 16);
-		getContentPane().add(lblPrioridad);
-
-		JLabel lblPropietario = new JLabel("Propietario:");
-		lblPropietario.setBounds(29, 305, 71, 16);
-		getContentPane().add(lblPropietario);
-
-		JLabel lblFecha = new JLabel("Fecha:");
-		lblFecha.setBounds(29, 332, 55, 16);
-		getContentPane().add(lblFecha);
-
-		textField_2 = new JTextField();
-		textField_2.setBounds(112, 249, 198, 20);
-		getContentPane().add(textField_2);
-		textField_2.setColumns(10);
-
-		textField_3 = new JTextField();
-		textField_3.setColumns(10);
-		textField_3.setBounds(112, 303, 198, 20);
-		getContentPane().add(textField_3);
-
-
-
-		JButton btnNewButton = new JButton("Agregar");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showConfirmDialog(null, "Desea agregar los datos?");
-				String titulo = textField.getText();
-				if("".equalsIgnoreCase(titulo.trim())){
-					JOptionPane.showMessageDialog(null, "Titulo vacio!");
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-				Task tarea = new Task(titulo);
-				tarea.setDescription(textField_1.getText());
-				String descripcion = textField_1.getText();
-				if("".equalsIgnoreCase(descripcion.trim())){
-					JOptionPane.showMessageDialog(null, "Descripcion vacio!!");
-				}
-				String Cate = textField_2.getText();
-				if("".equalsIgnoreCase(Cate.trim())){
-					JOptionPane.showMessageDialog(null, "Categoria vacio!!");
-				}
-				Category c = new Category();
-				c.setDescription(textField_2.getText());
-				tarea.setCategory(c);
-				tarea.setState((State)comboBox.getSelectedItem());
-				tarea.setPriority((short)comboBox.getSelectedItem());
-				tarea.setOwner(textField_3.getText());
-				String Dueno = textField_3.getText();
-				if("".equalsIgnoreCase(Dueno.trim())){
-					JOptionPane.showMessageDialog(null, "Dueño vacio!!");
-				}
-				Date date = new Date();
-				tarea.setCreateDate(date);
-				Calendar cal = Calendar.getInstance();  
-				cal.setTime(date);  
-				int foo = Integer.parseInt(textField_4.getText());
-				cal.add(Calendar.DATE, foo); // add number of days
-				date = cal.getTime();
-				tarea.setDueDate(date);
-				Program.dashboard.add(tarea);
-				clean();
 			}
 		});
-		btnNewButton.setBounds(29, 369, 103, 41);
-		getContentPane().add(btnNewButton);
-
-		
-		JButton btnCancelar = new JButton("Cancelar");
-		btnCancelar.addActionListener(new ActionListener() {
-		 			public void actionPerformed(ActionEvent e) {
-		 				if(JOptionPane.showConfirmDialog(Jpanel.this, "Decea Cerrar la Ventana", "Cerrar", JOptionPane.YES_NO_OPTION)==JOptionPane.OK_OPTION){
-		 					dispose();
-		 				System.exit(1);}
-		 			}
-		 	});
-		btnCancelar.setBounds(174, 369, 103, 41);
-		getContentPane().add(btnCancelar);
-
-		JComboBox comboBox = new JComboBox();
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"BACKLOG", "DO_TO", "IN_PROGRESS", "DONE"}));
-		comboBox.setToolTipText("");
-		comboBox.setBounds(112, 220, 198, 25);
-		getContentPane().add(comboBox);
-
-		JComboBox comboBox_1 = new JComboBox();
-		comboBox_1.setModel(new DefaultComboBoxModel(new String[] {"Alta ", "Media ", "Baja "}));
-		comboBox_1.setBounds(112, 274, 198, 25);
-		getContentPane().add(comboBox_1);
-
-		textField_4 = new JTextField();
-		textField_4.setBounds(112, 334, 198, 20);
-		getContentPane().add(textField_4);
-		textField_4.setColumns(10);
-		
-		JProgressBar progressBar = new JProgressBar();
-		progressBar.setForeground(Color.RED);
-		progressBar.setBounds(85, 11, 146, 14);
-		getContentPane().add(progressBar);
-	for(int x=0;x<100;x++)
-		progressBar.setValue(x);
-				
-
-
-
 	}
-		private class CerrarVentana3 implements ActionListener{
-			public void actionPerformed(ActionEvent e){
+
+	private void clean() {
+		titulo.setText("");
+		descripcion.setText("");
+		Estado.setSelectedIndex(0);
+		categoria.setText("");
+		usuario.setText("");
+		date.setText(new Date().toString());
+	}
+
+	private  void isEmpty(String message, JTextComponent text)
+		throws EmptyComponentException{
+			if("".equals(text.getText().trim())){
+				throw new EmptyComponentException(message, text);
+			}
+		}
+
+
+	private void verify()throws Exception{
+		isEmpty("Tittle field is empty", titulo);
+		isEmpty("Description fields is emptu", descripcion);
+		isEmpty("Category field is empty", categoria);
+		isEmpty("User field is empty", usuario);
+		isEmpty("Due Date field is empty",date);
+	}
+
+
+	public boolean save(){
+		Task task=new Task();
+		task.setTitle(titulo.getText());
+		task.setDescription(descripcion.getText());
+		task.setState(Estado.getItemAt(Estado.getSelectedIndex()));
+		task.setCategory(new Category(categoria.getText()));
+		task.setPriority((short)Prioridad.getSelectedItem());
+		task.setOwner(usuario.getText());
+		SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM d HH:mm:ss zzz yyyy");
+		System.out.println(task.getTitle());
+		try {
+		 task.setDueDate(formatter.parse(date.getText()));
+		} catch (ParseException e) {
+			return false;
+		}
+		task.setCreateDate(new Date());
+
+		return Program.dashboard.add(task);
+	}
+
+	private class TaskAction implements ActionListener {
+		@Override
+	public void actionPerformed(ActionEvent e) {
+		Object source = e.getSource();
+		if (source instanceof JButton) {
+			if (Aceptar == source) {
+				try{
+					verify();
+					if (JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(null,"Quieres agregar esta tarea?","Confirmacion",
+									JOptionPane.YES_NO_OPTION,
+									JOptionPane.INFORMATION_MESSAGE)) {
+						if (save()) {
+							JOptionPane.showMessageDialog(null,"Se ha agregado");
+							clean();
+						}
+					}
+				}catch(EmptyComponentException ex){
+					JOptionPane.showMessageDialog(null, ex.getMessage(),"Validation error", JOptionPane.ERROR_MESSAGE);
+					ex.getComponent().requestFocus();
+
+
+			}catch(Exception ex){
+				JOptionPane.showMessageDialog(null, ex.getMessage(),"Validation error", JOptionPane.ERROR_MESSAGE);
+			}
+
+			} else if (Cancel == source) {
 				dispose();
 			}
 		}
-	public static void main(String[] args){
-		JFrame labelFrame2=new Jpanel();
-		labelFrame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		labelFrame2.setSize(350,460);
-		labelFrame2.setVisible(true);
 	}
 }
 
+	public void addListeners() {
+		TaskAction ta = new TaskAction();
+		Aceptar.addActionListener(ta);
+		Cancel.addActionListener(ta);
+	}
+
+	public void initialize() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 490, 516);
+		contentPane = new JLayeredPane();
+		contentPane.setBackground(Color.GRAY);
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+
+		JLabel lblNewLabelTITLE = new JLabel("Kamba-GRM");
+		lblNewLabelTITLE.setBounds(133, 11, 263, 37);
+		contentPane.add(lblNewLabelTITLE);
+
+		titulo = new JTextField();
+		titulo.setBounds(166, 69, 265, 20);
+		contentPane.add(titulo);
+		titulo.setColumns(10);
+
+		descripcion = new JTextField();
+		descripcion.setColumns(10);
+		descripcion.setBounds(166, 119, 265, 53);
+		contentPane.add(descripcion);
+
+		JLabel lblDescription = new JLabel("Description");
+		lblDescription.setBounds(59, 117, 90, 22);
+		contentPane.add(lblDescription);
+
+		JLabel lblTitle = new JLabel("Title");
+		lblTitle.setBounds(59, 66, 37, 24);
+		contentPane.add(lblTitle);
+
+		JLabel lblState = new JLabel("State");
+		lblState.setBounds(59, 198, 42, 22);
+		contentPane.add(lblState);
+
+		JLabel lblCategory = new JLabel("Category");
+		lblCategory.setBounds(59, 252, 73, 22);
+		contentPane.add(lblCategory);
+
+		JLabel lblPriority = new JLabel("Priority");
+		lblPriority.setBounds(59, 312, 56, 22);
+		contentPane.add(lblPriority);
+
+		JLabel lblUser = new JLabel("User");
+		lblUser.setBounds(59, 357, 38, 22);
+		contentPane.add(lblUser);
+
+		JLabel lblDueDate = new JLabel("Due Date");
+		lblDueDate.setBounds(59, 403, 76, 22);
+		contentPane.add(lblDueDate);
+
+		categoria = new JTextField();
+		categoria.setColumns(10);
+		categoria.setBounds(166, 254, 265, 20);
+		contentPane.add(categoria);
+
+		usuario = new JTextField();
+		usuario.setColumns(10);
+		usuario.setBounds(166, 359, 265, 20);
+		contentPane.add(usuario);
+
+		date = new JTextField();
+		date.setColumns(10);
+		date.setBounds(166, 405, 265, 20);
+		contentPane.add(date);
+
+		Estado = new JComboBox<State>(State.values());
+		//final JComboBox Estado = new JComboBox();
+		Estado.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String state=(String)Estado.getSelectedItem();
+				JOptionPane.showMessageDialog(null,"Has seleccionado el estado: "+state);
+			}
+		});
+		Estado.setModel(new DefaultComboBoxModel(new String[] {"Backlog", "DO TO", "IN PROGRESS", "DONE"}));
+				Estado.setBounds(166, 200, 265, 20);
+		contentPane.add(Estado);
+
+		Prioridad = new JComboBox();
+		//final JComboBox Prioridad = new JComboBox();
+		Prioridad.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String priority=(String)Prioridad.getSelectedItem();
+				JOptionPane.showMessageDialog(null,"Has seleccionado la prioridad: "+priority);
+			}
+		});
+		Prioridad.setModel(new DefaultComboBoxModel(new String[] {"...", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"}));
+		Prioridad.setBounds(166, 312, 265, 20);
+		contentPane.add(Prioridad);
+
+		Aceptar.setBounds(154, 443, 89, 23);
+		contentPane.add(Aceptar);
+
+		//JButton Cancel = new JButton("Cancel");
+		Cancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				dispose();
+			}
+		}); 
+		Cancel.setBounds(253, 443, 89, 23);
+		contentPane.add(Cancel);
+	}
+}
 
